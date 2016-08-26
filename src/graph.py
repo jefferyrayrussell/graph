@@ -5,7 +5,10 @@ class GNode(object):
     def __init__(self, value):
         """Create an instance of a GNode with the attribues of a value and a list of edges."""
         self.value = value
-        self.edges = []
+        self.edges = set()
+
+    def __str__(self):
+        return 'Node: {}'.format(str(self.value)
 
 
 class Graph(object):
@@ -13,20 +16,46 @@ class Graph(object):
 
     def __init__(self):
         """Create an instance of a Graph that has a list of nodes."""
-        self.list_of_nodes = []
+        self.set_of_nodes = set()
 
     def add_node(self, new_node):
         """Adds a new node to the graph"""
-        self.list_of_nodes.append(new_node)
+        self.set_of_nodes.add(new_node)
 
 
     def has_node(self, node):
         """True if node 'n' is contained in the graph, False if not."""
-        return node in self.list_of_nodes
+        return node in self.set_of_nodes
 
 
     def add_edge(self, node1, node2):
         """Adds a new edge to the graph connecting 'n1' and 'n2'; if either n1 or n2 are not lready present in the graph, they should be added."""
+        self.set_of_nodes.add(node1)
+        self.set_of_nodes.add(node2)
+        node1.edges.add(node2)
+
+
+    def del_edge(self, node1, node2):
+        """Delete the edge connecting 'n1' and 'n2' from the graph, raises a Key Error if no such edge exists."""
+        try:
+            node1.edges.remove(node2)
+        except KeyError:
+            raise KeyError ('Edge that you are trying to exist does not exist.')
+
+    def del_node(self, node_to_del):
+        '''del_node deletes the node 'n' from the graph, raises an error if no such node exists'''
+        try:
+            self.set_of_nodes.remove(node_to_del)
+        except KeyError:
+            raise KeyError ('Node does not exist in graph.')
+
+        for node in self.set_of_nodes:
+            try:
+                node.edges.remove(node_to_del)
+            except KeyError:
+                pass
+
+    def nodes(self):
         pass
 
 
@@ -40,25 +69,6 @@ class Graph(object):
 # for node in list of nodes
 # print the list of edges for that node
 
-
-# add.edge(n1,n2) adds a new edge to the graph connetion 'n1' and 'n2'; if either n1 or n2 are not lready present in the graph, they should be added.
-# if n1 or n2 is not in the current list of nodes
-#     then add.node(n) with the new node as the argument
-# append n2 to n1's list of nodes
-
-# del_node(n) deletes the node 'n' from the graph, raises an error if no such node exists
-# check to see that node n is in the current list of nodes
-#     if not in list raise error
-#     if in list 
-#         delete node from list of nodes
-#         for node in list of nodes
-#             look for the node in the list of edges for the remaining nodes
-#             remove edge from the node
-
-# del_edge(n1, n2) deletes the edge connecting 'n1' and 'n2' from the graph, raises an eror if no such edge exists.
-#     if not in the list of edges raise error
-#     if in list
-#         delete edge from the n1
 
 # neighbors(n) returns the list of all nodes connected to 'n' by edges, raise an error if n is not in g.
 #     check has.node 
