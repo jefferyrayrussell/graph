@@ -30,17 +30,22 @@ class Graph(object):
         self.set_of_nodes.add(new_node)
 
     def is_node(self, node):
-        """Checks to see if object is a node. Will run before adding to Graph."""
-        if not isinstance(node, GNode):
+        """Checks to see if object is a node. Returns a TypeError if it is not a node."""
+        if isinstance(node, GNode):
+            return True
+        else:
             raise TypeError('{} is not a GNode type.'.format(str(node)))
 
     def has_node(self, node):
         """True if node 'n' is contained in the graph, False if not."""
+        self.is_node(node)
         return node in self.set_of_nodes
 
 
     def add_edge(self, node1, node2):
         """Adds a new edge to the graph connecting 'n1' and 'n2'; if either n1 or n2 are not lready present in the graph, they should be added."""
+        self.is_node(node1)
+        self.is_node(node2)
         self.set_of_nodes.add(node1)
         self.set_of_nodes.add(node2)
         node1.edges.add(node2)
@@ -52,6 +57,8 @@ class Graph(object):
             node1.edges.remove(node2)
         except KeyError:
             raise KeyError ('Edge that you are trying to exist does not exist.')
+        except AttributeError:
+            raise TypeError('{} is not a GNode type.'.format(str(node1)))
 
     def del_node(self, node_to_del):
         '''del_node deletes the node 'n' from the graph, raises an error if no such node exists'''
@@ -75,21 +82,18 @@ class Graph(object):
             print('{0} {1}'.format(node, node.print_edges()))
 
 
-
+    def adjacent(self, node1, node2):
+        self.is_node(node1)
+        self.is_node(node2)
+        if not self.has_node(node1) or not self.has_node(node2):
+            raise KeyError('Cannot check adjacent on a node that is not in the graph.')
+        else:
+            return node2 in node1.edges
 
 # neighbors(n) returns the list of all nodes connected to 'n' by edges, raise an error if n is not in g.
 #     check has.node 
 #     if False, return error
 #     else return edges from node n (check with instructor regarding one way or two way arrows)
-
-# adjacent(n1,n2) returns true if there is an edge connecting n1 and n2, False if not, raises an error if either node not in list.
-#     check if nodes in list
-#     if false, return error
-#     if true check if n2 is an edge of n1
-#         if true return true,
-#         if not return false.
-
-
 
 
 
