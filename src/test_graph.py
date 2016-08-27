@@ -153,3 +153,9 @@ def test_edges_connected(graph_multi_node):
     from graph import Edge
     my_edge = Edge(graph_multi_node[1], graph_multi_node[2])
     assert my_edge in graph_multi_node[0].edges()
+
+
+def test_edges_not_connected(graph_multi_node):
+    from graph import Edge
+    my_edge = Edge(graph_multi_node[2], graph_multi_node[1])
+    assert my_edge not in graph_multi_node[0].edges()
