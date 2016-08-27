@@ -8,7 +8,13 @@ class GNode(object):
         self.edges = set()
 
     def __str__(self):
-        return 'Node: {}'.format(str(self.value)
+        return 'Node: {}'.format(str(self.value))
+
+    def print_edges(self):
+        list_of_edge_values = []
+        for edge in self.edges:
+            list_of_edge_values.append(str(edge.value))
+        return 'Edges: {0}'.format(', '.join(list_of_edge_values))
 
 
 class Graph(object):
@@ -20,8 +26,13 @@ class Graph(object):
 
     def add_node(self, new_node):
         """Adds a new node to the graph"""
+        self.is_node(new_node)
         self.set_of_nodes.add(new_node)
 
+    def is_node(self, node):
+        """Checks to see if object is a node. Will run before adding to Graph."""
+        if not isinstance(node, GNode):
+            raise TypeError('{} is not a GNode type.'.format(str(node)))
 
     def has_node(self, node):
         """True if node 'n' is contained in the graph, False if not."""
@@ -56,18 +67,14 @@ class Graph(object):
                 pass
 
     def nodes(self):
-        pass
+        for node in self.set_of_nodes:
+            print(node)
+
+    def edges(self):
+        for node in self.set_of_nodes:
+            print('{0} {1}'.format(node, node.print_edges()))
 
 
-
-
-# nodes() return a list of all the nodes in a graph
-# for node in list of nodes
-# print node
-
-# edges() return a list of all edges in the graph
-# for node in list of nodes
-# print the list of edges for that node
 
 
 # neighbors(n) returns the list of all nodes connected to 'n' by edges, raise an error if n is not in g.
