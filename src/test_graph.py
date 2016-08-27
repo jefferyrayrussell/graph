@@ -70,6 +70,11 @@ def test_graph_del_edge_no_exists(graph_two_node, gnode1, gnode2):
         graph_two_node.del_edge(gnode1, gnode2)
 
 
+def test_graph_del_edge_not_a_node(graph_two_node, gnode1, gnode2):
+    with pytest.raises(TypeError):
+        graph_two_node.del_edge('gnode1', gnode2)
+
+
 def test_graph_del_node_exists_check_graph_for_node(graph_one_node, gnode1):
     graph_one_node.del_node(gnode1)
     assert gnode1 not in graph_one_node.set_of_nodes
@@ -84,6 +89,19 @@ def test_graph_del_node_check_edges(graph_empty, gnode1, gnode2):
     graph_empty.add_edge(gnode1, gnode2)
     graph_empty.del_node(gnode2)
     assert gnode2 not in gnode1.edges
+
+def test_graph_del_node_not_a_node(graph_empty, gnode1, gnode2):
+    graph_empty.add_edge(gnode1, gnode2)
+    with pytest.raises(KeyError):
+        graph_empty.del_node('gnode2')
+
+def test_graph_del_node_other_nodes_not_changed(graph_two_node, gnode1, gnode2):
+    from graph import GNode
+    gnode3 = GNode(3)
+    graph_two_node.add_edge(gnode1, gnode2)
+    graph_two_node.add_edge(gnode3, gnode1)
+    graph_two_node.del_node(gnode2)
+    assert gnode1 in gnode3.edges
 
 
 def test_adjacent_true(graph_two_node, gnode1, gnode2):
@@ -106,20 +124,32 @@ def test_adjacent_error_not_a_node(graph_one_node, gnode1, gnode2):
         graph_one_node.adjacent(gnode1, 'not a node')
 
 
-
-def test_neighbors_has_edges():
-    pass
-
-
-def test_neighbors_no_edges():
-    pass
-
-def test_neighbors_not_in_graph():
-    pass
+def test_neighbors_has_edges(graph_two_node, gnode1, gnode2):
+    graph_two_node.add_edge(gnode1, gnode2)
+    assert graph_two_node.neighbors(gnode1) == [gnode2]
 
 
 
+def test_neighbors_no_edges(graph_two_node, gnode1, gnode2):
+    assert graph_two_node.neighbors(gnode1) == []
 
 
+def test_neighbors_not_in_graph(graph_one_node, gnode1, gnode2):
+    with pytest.raises(KeyError):
+        graph_one_node.neighbors(gnode2)
 
 
+def test_nodes_connected(graph_multi_node, gnode1):
+    grph = graph_multi_node[0]
+    assert gnode1 in grph.nodes()
+
+
+def test_nodes_unconnected(graph_multi_node, gnode2):
+    grph = graph_multi_node[0]
+    assert gnode2 in grph.nodes()
+
+
+def test_edges_connected(graph_multi_node):
+    from graph import Edge
+    my_edge = Edge(graph_multi_node[1], graph_multi_node[2])
+    assert my_edge in graph_multi_node[0].edges()

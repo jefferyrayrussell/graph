@@ -1,4 +1,5 @@
 
+
 class GNode(object):
     """Create a GNode Constructor."""
 
@@ -7,14 +8,14 @@ class GNode(object):
         self.value = value
         self.edges = set()
 
-    def __str__(self):
-        return 'Node: {}'.format(str(self.value))
 
-    def print_edges(self):
-        list_of_edge_values = []
-        for edge in self.edges:
-            list_of_edge_values.append(str(edge.value))
-        return 'Edges: {0}'.format(', '.join(list_of_edge_values))
+class Edge(object):
+    """Create an Edge Constructor."""
+
+    def __init__(self, begin, end):
+        """Create an instance of an edge."""
+        self.begin = begin
+        self.end = end
 
 
 class Graph(object):
@@ -74,13 +75,15 @@ class Graph(object):
                 pass
 
     def nodes(self):
-        for node in self.set_of_nodes:
-            print(node)
+        return list(self.set_of_nodes)
+
 
     def edges(self):
+        list_of_edges = []
         for node in self.set_of_nodes:
-            print('{0} {1}'.format(node, node.print_edges()))
-
+            for edge in node.edges:
+                list_of_edges.append(Edge(node, edge))
+        return list_of_edges
 
     def adjacent(self, node1, node2):
         self.is_node(node1)
@@ -90,14 +93,11 @@ class Graph(object):
         else:
             return node2 in node1.edges
 
-# neighbors(n) returns the list of all nodes connected to 'n' by edges, raise an error if n is not in g.
-#     check has.node 
-#     if False, return error
-#     else return edges from node n (check with instructor regarding one way or two way arrows)
 
-
-
-
-
-
+    def neighbors(self, node):
+        '''Return the list of all nodes connected to 'n' by edges, raise an error if node is not in graph.'''
+        if node not in self.set_of_nodes:
+            raise KeyError("{} isn't a node in the graph".format(node))
+        else:
+            return list(node.edges)
 
