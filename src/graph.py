@@ -1,11 +1,29 @@
 
+
 class GNode(object):
     """Create a GNode Constructor."""
 
     def __init__(self, value):
         """Create an instance of a GNode with the attribues of a value and a list of edges."""
         self.value = value
-        self.edges = []
+        self.edges = set()
+
+
+class Edge(object):
+    """Create an Edge Constructor."""
+
+    def __init__(self, begin, end):
+        """Create an instance of an edge."""
+        self.begin = begin
+        self.end = end
+
+    def __eq__(self, other):
+        """Allow comparison of two equal edges."""
+        return self.begin == other.begin and self.end == other.end
+
+    def __ne__(self, other):
+        """Allow comparison of two unequal edges."""
+        return self.begin != other.begin or self.end != other.end
 
 
 class Graph(object):
@@ -13,70 +31,79 @@ class Graph(object):
 
     def __init__(self):
         """Create an instance of a Graph that has a list of nodes."""
-        self.list_of_nodes = []
+        self.set_of_nodes = set()
 
     def add_node(self, new_node):
-        """Adds a new node to the graph"""
-        self.list_of_nodes.append(new_node)
+        """Add a new node to the graph."""
+        self.is_node(new_node)
+        self.set_of_nodes.add(new_node)
 
+    def is_node(self, node):
+        """Check to see if object is a node. Returns a TypeError if it is not a node."""
+        if isinstance(node, GNode):
+            return True
+        else:
+            raise TypeError('{} is not a GNode type.'.format(str(node)))
 
     def has_node(self, node):
         """True if node 'n' is contained in the graph, False if not."""
-        return node in self.list_of_nodes
-
+        self.is_node(node)
+        return node in self.set_of_nodes
 
     def add_edge(self, node1, node2):
-        """Adds a new edge to the graph connecting 'n1' and 'n2'; if either n1 or n2 are not lready present in the graph, they should be added."""
-        pass
+        """Add a new edge to the graph connecting 'n1' and 'n2'; if either n1 or n2 are not lready present in the graph, they should be added."""
+        self.is_node(node1)
+        self.is_node(node2)
+        self.set_of_nodes.add(node1)
+        self.set_of_nodes.add(node2)
+        node1.edges.add(node2)
 
+    def del_edge(self, node1, node2):
+        """Delete the edge connecting 'n1' and 'n2' from the graph, raises a Key Error if no such edge exists."""
+        try:
+            node1.edges.remove(node2)
+        except KeyError:
+            raise KeyError('Edge that you are trying to exist does not exist.')
+        except AttributeError:
+            raise TypeError('{} is not a GNode type.'.format(str(node1)))
 
+    def del_node(self, node_to_del):
+        """Delete a node from the graph, raises an error if no such node exists."""
+        try:
+            self.set_of_nodes.remove(node_to_del)
+        except KeyError:
+            raise KeyError('Node does not exist in graph.')
 
+        for node in self.set_of_nodes:
+            try:
+                node.edges.remove(node_to_del)
+            except KeyError:
+                pass
 
-# nodes() return a list of all the nodes in a graph
-# for node in list of nodes
-# print node
+    def nodes(self):
+        """Return a list of nodes."""
+        return list(self.set_of_nodes)
 
-# edges() return a list of all edges in the graph
-# for node in list of nodes
-# print the list of edges for that node
+    def edges(self):
+        """Return a list of edges."""
+        list_of_edges = []
+        for node in self.set_of_nodes:
+            for edge in node.edges:
+                list_of_edges.append(Edge(node, edge))
+        return list_of_edges
 
+    def adjacent(self, node1, node2):
+        """Return true if two nodes are connected by an edge, false if not connected.  Will raise a TypeError is one node is not in the graph."""
+        self.is_node(node1)
+        self.is_node(node2)
+        if not self.has_node(node1) or not self.has_node(node2):
+            raise KeyError('Cannot check adjacent on a node that is not in the graph.')
+        else:
+            return node2 in node1.edges
 
-# add.edge(n1,n2) adds a new edge to the graph connetion 'n1' and 'n2'; if either n1 or n2 are not lready present in the graph, they should be added.
-# if n1 or n2 is not in the current list of nodes
-#     then add.node(n) with the new node as the argument
-# append n2 to n1's list of nodes
-
-# del_node(n) deletes the node 'n' from the graph, raises an error if no such node exists
-# check to see that node n is in the current list of nodes
-#     if not in list raise error
-#     if in list 
-#         delete node from list of nodes
-#         for node in list of nodes
-#             look for the node in the list of edges for the remaining nodes
-#             remove edge from the node
-
-# del_edge(n1, n2) deletes the edge connecting 'n1' and 'n2' from the graph, raises an eror if no such edge exists.
-#     if not in the list of edges raise error
-#     if in list
-#         delete edge from the n1
-
-# neighbors(n) returns the list of all nodes connected to 'n' by edges, raise an error if n is not in g.
-#     check has.node 
-#     if False, return error
-#     else return edges from node n (check with instructor regarding one way or two way arrows)
-
-# adjacent(n1,n2) returns true if there is an edge connecting n1 and n2, False if not, raises an error if either node not in list.
-#     check if nodes in list
-#     if false, return error
-#     if true check if n2 is an edge of n1
-#         if true return true,
-#         if not return false.
-
-
-
-
-
-
-
-
-
+    def neighbors(self, node):
+        """Return the list of all nodes connected to a node by edges, raise an error if node is not in graph."""
+        if node not in self.set_of_nodes:
+            raise KeyError("{} isn't a node in the graph".format(node))
+        else:
+            return list(node.edges)
