@@ -40,6 +40,29 @@ def graph_one_node(gnode1):
 
 
 @pytest.fixture()
+def graph_cyclic_with_nodes(graph_two_node, gnode1, gnode2):
+    graph_cyclic = graph_two_node
+    gn3 = GNode(3)
+    graph_cyclic.add_edge(gnode1, gnode2)
+    graph_cyclic.add_edge(gnode2, gn3)
+    graph_cyclic.add_edge(gn3, gnode1)
+    return (graph_cyclic, gnode1, gnode2, gn3)
+
+
+@pytest.fixture()
+def graph_v_with_nodes(graph_two_node, gnode1, gnode2):
+    graph_v = graph_two_node
+    gn3 = GNode(3)
+    gn4 = GNode(4)
+    gn5 = GNode(5)
+    graph_v.add_edge(gnode1, gnode2)
+    graph_v.add_edge(gnode1, gn3)
+    graph_v.add_edge(gnode2, gn4)
+    graph_v.add_edge(gn3, gn5)
+    return (graph_v, gnode1, gnode2, gn3, gn4, gn5)
+
+
+@pytest.fixture()
 def graph_multi_node(graph_two_node, gnode1, gnode2):
     """Create a multi node graph"""
     from graph import Graph
