@@ -130,16 +130,29 @@ class Graph(object):
         # Continue until the list is exhausted: every node has been appended.
         return traversal
 
-    def depth_first_traversal(start):
+    def depth_first_traversal(self, start):
         """Return the full visited path when depth traversal is complete after starting with any node."""
         # Traversal is an empty list.
-        traversal = []
         # Append the staring node.
-        traversal.append(start)
+        self.is_node(start)
+        traversal = []
+        traversal = self.depth_traversal_add_node(start, traversal)
+        return traversal
+
+
+    def depth_traversal_add_node(self, start, traversal):
+        if start in traversal:
+            return traversal
+        else:
+            traversal.append(start)
+            for edge in [x for x in start.edges if x not in traversal]:
+                self.depth_traversal_add_node(edge, traversal)
+            return traversal
+
+
+
         #   For all the edges not in the traversal list
-        for edge in [x for x in strart.edges if x not in traversal]:
         #       call the depth first transversal function
-            depth_first_traversal(edge)
 
 
         # Check if starting node has an edge.
