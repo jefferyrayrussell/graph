@@ -111,29 +111,19 @@ class Graph(object):
     def breadth_first_traversal(self, start):
         """Return the full visited path when breadth traversal is complete after starting with any node."""
         self.is_node(start)
-        # Traversal is an empty list.
         traversal = []
-        # Append starting node.
         traversal.append(start)
-        # Check edges to see if they are already present in the transversal list.
         index = 0
         while True:
             try:
                 traversal.extend([x for x in traversal[index].edges if x not in traversal ])
             except IndexError:
                 break
-        # Append those edges that are present and not already in the list.
             index += 1
-        # Check edges of the next item of the list.
-        # Append those edges not yet in the list.
-        # If an edge is already in the list go the next item.
-        # Continue until the list is exhausted: every node has been appended.
         return traversal
 
     def depth_first_traversal(self, start):
         """Return the full visited path when depth traversal is complete after starting with any node."""
-        # Traversal is an empty list.
-        # Append the staring node.
         self.is_node(start)
         traversal = []
         traversal = self.depth_traversal_add_node(start, traversal)
@@ -149,30 +139,3 @@ class Graph(object):
             for edge in [x for x in start.edges if x not in traversal]:
                 self.depth_traversal_add_node(edge, traversal)
             return traversal
-
-
-
-        #   For all the edges not in the traversal list
-        #       call the depth first transversal function
-
-
-        # Check if starting node has an edge.
-        # If no edge, Traversal list is complete.
-        # If an edge, append first edge to list.
-        # Check
-
-
-        # Check to see if there is a second edge.
-        # If present go to second edge.
-        # If not present, append edge to list.
-        # Check if 
-
-
-
-
-
-
-
-
-
-
