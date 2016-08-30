@@ -141,6 +141,7 @@ class Graph(object):
 
 
     def depth_traversal_add_node(self, start, traversal):
+        # import pdb; pdb.set_trace()
         if start in traversal:
             return traversal
         else:
