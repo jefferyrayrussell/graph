@@ -107,3 +107,43 @@ class Graph(object):
             raise KeyError("{} isn't a node in the graph".format(node))
         else:
             return list(node.edges)
+
+    def g.breadth_first_traversal(start):
+        """Return the full visited path when breadth traversal is complete after starting with any node."""
+        # Traversal is an empty list.
+        # Append starting node.
+        # Check edges to see if they are already present in the transversal list.
+        # Append those edges that are present and not already in the list.
+        # Check edges of the next item of the list.
+        # Append those edges not yet in the list.
+        # If an edge is already in the list go the next item.
+        # Continue until the list is exhausted: every node has been appended.
+
+    def g.depth_first_traversal(start):
+        """Return the full visited path when depth traversal is complete after starting with any node."""
+        # Traversal is an empty list.
+        # Append the staring node.
+        #   For all the edges not in the traversal list
+        #       call the depth first transversal function
+
+
+        # Check if starting node has an edge.
+        # If no edge, Traversal list is complete.
+        # If an edge, append first edge to list.
+        # Check
+
+
+        # Check to see if there is a second edge.
+        # If present go to second edge.
+        # If not present, append edge to list.
+        # Check if 
+
+
+
+
+
+
+
+
+
+

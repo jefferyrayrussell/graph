@@ -34,3 +34,9 @@ __Methods__:
 * g.adjacent(n1, n2): returns True if there is an edge connecting n1 and 
     n2, False if not, raises an error if either of the supplied nodes are 
     not in graph.
+* g.depth_first_traversal(start): Perform a full depth-first traversal of 
+    the graph beginning at start. Return the full visited path when 
+    traversal is complete.
+* g.breadth_first_traversal(start): Perform a full breadth-first traversal 
+    of the graph, beginning at start. Return the full visited path when 
+    traversal is complete.
