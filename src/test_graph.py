@@ -159,3 +159,72 @@ def test_edges_not_connected(graph_multi_node):
     from graph import Edge
     my_edge = Edge(graph_multi_node[2], graph_multi_node[1])
     assert my_edge not in graph_multi_node[0].edges()
+
+
+def test_breadth_transversal_one_node(graph_one_node, gnode1):
+    assert graph_one_node.breadth_first_traversal(gnode1) == [gnode1]
+
+
+def test_depth_transversal_one_node(graph_one_node, gnode1):
+    assert graph_one_node.depth_first_traversal(gnode1) == [gnode1]
+
+
+def test_breadth_transversal_two_node(graph_two_node, gnode1, gnode2):
+    graph_two_node.add_edge(gnode1, gnode2)
+    assert gnode2 in graph_two_node.breadth_first_traversal(gnode1)
+
+
+def test_depth_transversal_two_node(graph_two_node, gnode1, gnode2):
+    graph_two_node.add_edge(gnode1, gnode2)
+    assert gnode2 in graph_two_node.depth_first_traversal(gnode1)
+
+
+
+def test_breadth_transversal_two_node_not_in_traversal(graph_two_node, gnode1, gnode2):
+    graph_two_node.add_edge(gnode2, gnode1)
+    assert gnode2 not in graph_two_node.breadth_first_traversal(gnode1)
+
+
+def test_depth_transversal_two_node_not_in_traversal(graph_two_node, gnode1, gnode2):
+    graph_two_node.add_edge(gnode2, gnode1)
+    assert gnode2 not in graph_two_node.depth_first_traversal(gnode1)
+
+
+def test_breadth_transversal_cyclic(graph_cyclic_with_nodes):
+    graph_cylic = graph_cyclic_with_nodes[0]
+    gnode1 = graph_cyclic_with_nodes[1]
+    gnode3 = graph_cyclic_with_nodes[3]
+    assert gnode3 in graph_cylic.breadth_first_traversal(gnode1)
+
+
+def test_depth_transversal_cyclic(graph_cyclic_with_nodes):
+    """Test cyclic graph with transversal"""
+    graph_cylic = graph_cyclic_with_nodes[0]
+    gnode1 = graph_cyclic_with_nodes[1]
+    gnode3 = graph_cyclic_with_nodes[3]
+    assert gnode3 in graph_cylic.depth_first_traversal(gnode1)
+
+
+def test_order_breadth_transversal(graph_v_with_nodes):
+    """Graph: 4->2->1<-3<-5 Check to see if children append before the children's children."""
+    graph_v = graph_v_with_nodes[0]
+    node1 = graph_v_with_nodes[1]
+    node2 = graph_v_with_nodes[2]
+    node5 = graph_v_with_nodes[5]
+    transversal = graph_v.breadth_first_traversal(node1)
+    assert transversal.index(node2) < transversal.index(node5)
+
+
+def test_order_depth_transversal(graph_v_with_nodes):
+    """Graph: 4->2->1<-3<-5 Check to see if it goes to the bottom before other children."""
+    graph_v = graph_v_with_nodes[0]
+    node1 = graph_v_with_nodes[1]
+    node2 = graph_v_with_nodes[2]
+    node3 = graph_v_with_nodes[3]
+    node4 = graph_v_with_nodes[4]
+    node5 = graph_v_with_nodes[5]
+    transversal = graph_v.depth_first_traversal(node1)
+    if transversal.index(node2) < transversal.index(node3): 
+        assert transversal.index(node4) < transversal.index(node3)
+    else:
+        assert transversal.index(node5) < transversal.index(node2)
