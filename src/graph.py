@@ -3,14 +3,14 @@ class Graph(object):
 
     def __init__(self):
         """Create an instance of a Graph that has a list of nodes."""
-        self.nodes = {}
+        self.gnodes = {}
         self.set_of_nodes = set()
 
     def add_node(self, value):
         """Add a new node to the graph."""
         if value not in self.set_of_nodes:
             try:
-                self.nodes[value] = {}
+                self.gnodes[value] = {}
                 self.set_of_nodes.add(value)
             except TypeError:
                 raise TypeError('Nodes value need to be a hashable type.')
@@ -26,12 +26,12 @@ class Graph(object):
             self.add_node(value1)
         if not self.has_node(value2):
             self.add_node(value2)
-        self.nodes[value1][value2] = weight
+        self.gnodes[value1][value2] = weight
 
 
     def del_edge(self, value1, value2):
         try:
-            del(self.nodes[value1][value2])
+            del(self.gnodes[value1][value2])
         except KeyError:
             raise KeyError('Edge that you are trying to exist does not exist.')
 
@@ -41,21 +41,21 @@ class Graph(object):
             self.set_of_nodes.remove(value)
         except KeyError:
             raise KeyError('Node does not exist in graph.')
-        del(self.nodes[value])
-        for node in self.nodes:
+        del(self.gnodes[value])
+        for node in self.gnodes:
             try:
-                del(self.nodes[node][value])
+                del(self.gnodes[node][value])
             except KeyError:
                 pass
 
     def nodes(self):
-        return list(self.nodes.keys())
+        return list(self.set_of_nodes)
 
 
     def edges(self):
         edge_list = []
-        for node in self.nodes:
-            for key in self.nodes[node]:
+        for node in self.gnodes:
+            for key in self.gnodes[node]:
                 edge = '{0}->{1}'.format(node, key)
                 edge_list.append(edge)
         return edge_list
@@ -65,10 +65,10 @@ class Graph(object):
         if not(node1 in self.set_of_nodes and node2 in self.set_of_nodes):
             raise TypeError('A node is not in the graph.')
 
-        return node2 in self.nodes[node1]
+        return node2 in self.gnodes[node1]
 
     def neighbors(self, node):
-        return list(self.nodes[node])
+        return list(self.gnodes[node])
 
 
     def breadth_first_traversal(self, start):
@@ -106,7 +106,7 @@ class Graph(object):
 
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':              # pragma: no cover
 
     g6 = Graph()
     node_list = list('abcdefghijk')

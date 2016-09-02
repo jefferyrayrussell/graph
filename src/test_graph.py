@@ -14,42 +14,46 @@ def test_graph_has_node_true(graph_empty):
     graph_empty.add_node('gnode1')
     assert graph_empty.has_node('gnode1') is True
 
+def test_graph_node_non_hashable(graph_empty):
+    with pytest.raises(TypeError):
+        graph_empty.add_node(['list'])
+
 def test_graph_has_node_false(graph_empty):
     assert graph_empty.has_node('gnode1') is False
 
 def test_graph_add_edge_both_nodes_in_graph(graph_two_node):
     graph_two_node.add_edge('gnode1', 'gnode2', 0)
-    assert 'gnode2' in graph_two_node.nodes['gnode1']
+    assert 'gnode2' in graph_two_node.gnodes['gnode1']
 
 def test_graph_add_edge_both_nodes_in_graph_check_edge_direction(graph_two_node):
     graph_two_node.add_edge('gnode1', 'gnode2', 0)
-    assert 'gnode1' not in graph_two_node.nodes['gnode2']
+    assert 'gnode1' not in graph_two_node.gnodes['gnode2']
 
 def test_graph_add_edge_one_node_in_graph_check_edge(graph_one_node):
     graph_one_node.add_edge('gnode1', 'gnode2', 0)
-    assert 'gnode2' in graph_one_node.nodes['gnode1']
+    assert 'gnode2' in graph_one_node.gnodes['gnode1']
 
 def test_graph_add_edge_one_node_in_graph_check_node(graph_one_node):
     graph_one_node.add_edge('gnode1', 'gnode2', 0)
-    assert 'gnode2' in graph_one_node.nodes['gnode1']
+    assert 'gnode2' in graph_one_node.gnodes['gnode1']
 
 def test_graph_add_edge_neither_node_in_graph_check_edge(graph_empty):
     graph_empty.add_edge('gnode1', 'gnode2', 0)
-    assert 'gnode2' in graph_empty.nodes['gnode1']
+    assert 'gnode2' in graph_empty.gnodes['gnode1']
 
 def test_graph_add_edge_neither_node_in_graph_check_node1(graph_empty):
     graph_empty.add_edge('gnode1', 'gnode2', 0)
-    assert 'gnode1' in graph_empty.nodes
+    assert 'gnode1' in graph_empty.gnodes
 
 def test_graph_add_edge_neither_node_in_graph_check_node2(graph_empty):
     graph_empty.add_edge('gnode1', 'gnode2', 0)
-    assert 'gnode2' in graph_empty.nodes
+    assert 'gnode2' in graph_empty.gnodes
 
 
 def test_graph_del_edge_exists(graph_two_node):
     graph_two_node.add_edge('gnode1', 'gnode2', 0)
     graph_two_node.del_edge('gnode1', 'gnode2')
-    assert 'gnode2' not in graph_two_node.nodes['gnode1']
+    assert 'gnode2' not in graph_two_node.gnodes['gnode1']
 
 
 def test_graph_del_edge_no_exists(graph_two_node):
@@ -59,7 +63,7 @@ def test_graph_del_edge_no_exists(graph_two_node):
 
 def test_graph_del_node_exists_check_graph_for_node(graph_one_node):
     graph_one_node.del_node('gnode1')
-    assert 'gnode1' not in graph_one_node.nodes
+    assert 'gnode1' not in graph_one_node.gnodes
 
 
 def test_graph_del_node_exists_check_set_membership(graph_one_node):
@@ -75,7 +79,7 @@ def test_graph_del_node_no_exists(graph_one_node):
 def test_graph_del_node_check_edges(graph_empty):
     graph_empty.add_edge('gnode1', 'gnode2', 0)
     graph_empty.del_node('gnode2')
-    assert 'gnode2' not in graph_empty.nodes['gnode1']
+    assert 'gnode2' not in graph_empty.gnodes['gnode1']
 
 def test_graph_del_node_not_a_node(graph_empty):
     graph_empty.add_edge('gnode1', 'gnode2', 0)
@@ -86,7 +90,7 @@ def test_graph_del_node_other_nodes_not_changed(graph_two_node):
     graph_two_node.add_edge('gnode1', 'gnode2', 0)
     graph_two_node.add_edge('gnode3', 'gnode1', 0)
     graph_two_node.del_node('gnode2')
-    assert 'gnode1' in graph_two_node.nodes['gnode3'] 
+    assert 'gnode1' in graph_two_node.gnodes['gnode3'] 
 
 
 def test_adjacent_true(graph_two_node):
@@ -120,7 +124,7 @@ def test_neighbors_not_in_graph(graph_one_node):
 
 
 def test_nodes_connected(graph_multi_node):
-    assert 'gn1' in graph_multi_node.nodes
+    assert 'gn1' in graph_multi_node.gnodes
 
 
 def test_nodes_connected_test_set_membership(graph_multi_node):
@@ -128,11 +132,19 @@ def test_nodes_connected_test_set_membership(graph_multi_node):
 
 
 def test_nodes_unconnected(graph_multi_node):
-    assert 'gn2' in graph_multi_node.nodes
+    assert 'gn2' in graph_multi_node.gnodes
 
 
 def test_nodes_unconnected_test_set_membership(graph_multi_node):
     assert 'gn2' in graph_multi_node.set_of_nodes
+
+
+def test_nodes_list(graph_v):
+    assert sorted(graph_v.nodes()) == ['gnode1', 'gnode2', 'gnode3', 'gnode4', 'gnode5']
+
+
+def test_edge_list(graph_cyclic):
+    assert sorted(graph_cyclic.edges()) == ['gnode1->gnode2', 'gnode2->gnode3', 'gnode3->gnode1']
 
 
 def test_breadth_transversal_one_node(graph_one_node):
@@ -191,15 +203,21 @@ def test_order_depth_transversal(graph_v):
 
 def test_graph_weight(graph_empty):
     graph_empty.add_edge('gnode1', 'gnode2', 5)
-    assert graph_empty.nodes['gnode1']['gnode2'] == 5
+    assert graph_empty.gnodes['gnode1']['gnode2'] == 5
 
 
 def test_graph_weight_test_neg_amount(graph_empty):
     graph_empty.add_edge('gnode1', 'gnode2', -5)
-    assert graph_empty.nodes['gnode1']['gnode2'] == -5
+    assert graph_empty.gnodes['gnode1']['gnode2'] == -5
 
 
 def test_graph_weight_not_set_is_key_error(graph_empty):
     graph_empty.add_edge('gnode1', 'gnode2', 5)
     with pytest.raises(KeyError):
-        graph_empty.nodes['gnode2']['gnode1'] == 5
+        graph_empty.gnodes['gnode2']['gnode1'] == 5
+
+
+def test_graph_weight_reassign_weight(graph_empty):
+    graph_empty.add_edge('gnode1', 'gnode2', 2)
+    graph_empty.add_edge('gnode1', 'gnode2', 7)
+    assert graph_empty.gnodes['gnode1']['gnode2'] == 7
