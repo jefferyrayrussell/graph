@@ -105,6 +105,41 @@ class Graph(object):
             return traversal
 
 
+    """Pseudo-Code for Dijkstra's Algorithm used to find the shortest path between two nodes."""
+
+    """
+    Function will take two nodes of a graph data structure and return the shortest path between
+    those two nodes.  The return will be the path of nodes in a list and the total weight.
+
+    Set up a dictionary whose keys are each individual node in the graph structure and the value for
+    each key will be a second dictionary.   That second dictionary contains keys that will be distance,
+    previous node, and has been visited node (true or false).
+
+    Begin with a start_node A whose distance is set to 0.
+    For neighbors of A:
+        distance equals the weight of the edge between A and the neighbor.
+        previous node equals A
+
+    """
+
+    def dijkstra(self, start_node, end_node):
+        """Implementation of Dijkstra Algorithm to determine the shortest distance between two nodes."""
+        my_dict = self.dijkstra_init()
+        my_dict[start_node]["distance"] = 0
+        return my_dict
+
+
+    def dijkstra_init(self):
+        """Implementation of Dijkstra Algorithm to determine the shortest distance between two nodes."""
+        my_dict = {}
+        for key in self.gnodes:
+            my_dict[key] = {}
+            my_dict[key]["distance"] = None
+            my_dict[key]["visited"] = False
+        return my_dict
+
+
+
 
 if __name__ == '__main__':              # pragma: no cover
 

@@ -221,3 +221,28 @@ def test_graph_weight_reassign_weight(graph_empty):
     graph_empty.add_edge('gnode1', 'gnode2', 2)
     graph_empty.add_edge('gnode1', 'gnode2', 7)
     assert graph_empty.gnodes['gnode1']['gnode2'] == 7
+
+
+def test_dijkstra_dictionary_has_all_nodes(graph_multi_node):
+    """Test that all nodes are present in the dictionary."""
+    for key in graph_multi_node.gnodes:
+        assert key in graph_multi_node.dijkstra_init()
+
+def test_dijkstra_init_nodes_have_distance(graph_multi_node):
+    """Test that each node has the attribute distance."""
+    for key in graph_multi_node.dijkstra_init():
+        assert graph_multi_node.dijkstra_init()[key]["distance"] is None
+
+def test_dijkstra_init_nodes_visited(graph_multi_node):
+    """Test that each node visitied is false."""
+    for key in graph_multi_node.dijkstra_init():
+        assert graph_multi_node.dijkstra_init()[key]["visited"] is False
+
+def test_dijkstra_startnode_zero_distance_value(graph_multi_node):
+    """Test that start node has a beginning distance of zero."""
+    assert graph_multi_node.dijkstra('gn1', 'gn3')['gn1']['distance'] == 0
+
+def test_dijkstra_startnode_zero_distance_value(graph_multi_node):
+    """Test that start node has a beginning distance of zero."""
+    assert graph_multi_node.dijkstra('gn1', 'gn3')['gn3']['distance'] == 7
+

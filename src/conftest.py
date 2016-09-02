@@ -49,9 +49,9 @@ def graph_v():
 def graph_multi_node(graph_empty):
     """Create a multi node graph"""
     graph_empty.add_node('gn2')
-    graph_empty.add_edge('gn1', 'gn3', 0)
-    graph_empty.add_edge('gn3', 'gn1', 0)
-    graph_empty.add_edge('gn3', 'gn4', 0)
-    graph_empty.add_edge('gn3', 'gn5', 0)
-    graph_empty.add_edge('gn4', 'gn5', 0)
+    graph_empty.add_edge('gn1', 'gn3', 7)
+    graph_empty.add_edge('gn3', 'gn1', 7)
+    graph_empty.add_edge('gn3', 'gn4', 4)
+    graph_empty.add_edge('gn3', 'gn5', 10)
+    graph_empty.add_edge('gn4', 'gn5', 2)
     return (graph_empty)
