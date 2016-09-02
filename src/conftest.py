@@ -1,20 +1,5 @@
 import pytest
-from graph2 import Graph
-
-# @pytest.fixture()
-# def gnode1():
-#     """Create gnode with a value of 1."""
-#     g = Graph()
-#     g.add_node(1)
-
-#     return g
-
-
-# @pytest.fixture()
-# def gnode2():
-#     """Create gnode with a value of 2."""
-#     gnode = GNode(2)
-#     return gnode
+from graph import Graph
 
 
 @pytest.fixture()

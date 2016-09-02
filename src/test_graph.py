@@ -180,16 +180,26 @@ def test_order_breadth_transversal(graph_v):
     assert transversal.index('gnode2') < transversal.index('gnode5')
 
 
-# def test_order_depth_transversal(graph_v_with_nodes):
-#     """Graph: 4->2->1<-3<-5 Check to see if it goes to the bottom before other children."""
-#     graph_v = graph_v_with_nodes[0]
-#     node1 = graph_v_with_nodes[1]
-#     node2 = graph_v_with_nodes[2]
-#     node3 = graph_v_with_nodes[3]
-#     node4 = graph_v_with_nodes[4]
-#     node5 = graph_v_with_nodes[5]
-#     transversal = graph_v.depth_first_traversal(node1)
-#     if transversal.index(node2) < transversal.index(node3): 
-#         assert transversal.index(node4) < transversal.index(node3)
-#     else:
-#         assert transversal.index(node5) < transversal.index(node2)
+def test_order_depth_transversal(graph_v):
+    """Graph: 4->2->1<-3<-5 Check to see if it goes to the bottom before other children."""
+    transversal = graph_v.depth_first_traversal('gnode1')
+    if transversal.index('gnode2') < transversal.index('gnode3'): 
+        assert transversal.index('gnode4') < transversal.index('gnode3')
+    else:
+        assert transversal.index('gnode5') < transversal.index('gnode2')
+
+
+def test_graph_weight(graph_empty):
+    graph_empty.add_edge('gnode1', 'gnode2', 5)
+    assert graph_empty.nodes['gnode1']['gnode2'] == 5
+
+
+def test_graph_weight_test_neg_amount(graph_empty):
+    graph_empty.add_edge('gnode1', 'gnode2', -5)
+    assert graph_empty.nodes['gnode1']['gnode2'] == -5
+
+
+def test_graph_weight_not_set_is_key_error(graph_empty):
+    graph_empty.add_edge('gnode1', 'gnode2', 5)
+    with pytest.raises(KeyError):
+        graph_empty.nodes['gnode2']['gnode1'] == 5
