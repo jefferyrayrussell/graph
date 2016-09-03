@@ -50,6 +50,7 @@ def graph_multi_node(graph_empty):
     """Create a multi node graph"""
     graph_empty.add_node('gn2')
     graph_empty.add_edge('gn1', 'gn3', 7)
+    graph_empty.add_edge('gn1', 'gn5', 20)
     graph_empty.add_edge('gn3', 'gn1', 7)
     graph_empty.add_edge('gn3', 'gn4', 4)
     graph_empty.add_edge('gn3', 'gn5', 10)

@@ -14,7 +14,7 @@ class Graph(object):
                 self.set_of_nodes.add(value)
             except TypeError:
                 raise TypeError('Nodes value need to be a hashable type.')
-    
+
 
     def has_node(self, value):
         return value in self.set_of_nodes
@@ -64,8 +64,8 @@ class Graph(object):
     def adjacent(self, node1, node2):
         if not(node1 in self.set_of_nodes and node2 in self.set_of_nodes):
             raise TypeError('A node is not in the graph.')
-
         return node2 in self.gnodes[node1]
+
 
     def neighbors(self, node):
         return list(self.gnodes[node])
@@ -93,7 +93,7 @@ class Graph(object):
             traversal = self.depth_traversal_add_node(start, traversal)
             return traversal
 
- 
+
     def depth_traversal_add_node(self, start, traversal):
         """Add node for depth_first_traversal."""
         if start in traversal:
@@ -104,28 +104,40 @@ class Graph(object):
                 self.depth_traversal_add_node(edge, traversal)
             return traversal
 
-
-    """Pseudo-Code for Dijkstra's Algorithm used to find the shortest path between two nodes."""
-
     """
-    Function will take two nodes of a graph data structure and return the shortest path between
-    those two nodes.  The return will be the path of nodes in a list and the total weight.
+    Pseudo-Code for Dijkstra's Algorithm used to find the shortest
+    path between two nodes.
 
-    Set up a dictionary whose keys are each individual node in the graph structure and the value for
-    each key will be a second dictionary.   That second dictionary contains keys that will be distance,
+    Function will take two nodes of a graph data structure and return
+    the shortest path between those two nodes.  The return will be the
+    path of nodes in a list and the total weight.
+
+    Set up a dictionary whose keys are each individual node in the graph
+    structure and the value for each key will be a second dictionary.
+    That second dictionary contains keys that will be distance,
     previous node, and has been visited node (true or false).
 
     Begin with a start_node A whose distance is set to 0.
     For neighbors of A:
         distance equals the weight of the edge between A and the neighbor.
         previous node equals A
+    Start node A becomes visited.
+    We need to traverse through each of the nodes in the dictionary my_dict
+    and determine which node has the shortest distance.  That node with
+    the shortest distance becomes the current node.  We reiterate through
+    the dictionary.  We process the neighbors of the new current node.
+
 
     """
 
     def dijkstra(self, start_node, end_node):
         """Implementation of Dijkstra Algorithm to determine the shortest distance between two nodes."""
         my_dict = self.dijkstra_init()
-        my_dict[start_node]["distance"] = 0
+        my_dict[start_node]['distance'] = 0
+        for neighbor in self.neighbors(start_node):
+            my_dict[neighbor]['distance'] = self.gnodes[start_node][neighbor]
+            my_dict[neighbor]['previous_node'] = start_node
+        my_dict[start_node]['visited'] = True
         return my_dict
 
 
@@ -137,6 +149,24 @@ class Graph(object):
             my_dict[key]["distance"] = None
             my_dict[key]["visited"] = False
         return my_dict
+
+    def dijkstra_select_node(self, my_dict):
+        """Select the current shortest distance"""
+        smallest_length = 0
+        for node in my_dict:
+            try:
+                current_length = my_dict[node]['distance']
+            except KeyError:
+                continue
+            if current_length < smallest_length or smallest_length = 0:
+                smallest_length = current_length
+                current_node = node
+        try:
+            return current_node
+        except NameError:
+            return None
+            
+
 
 
 

@@ -1,49 +1,60 @@
 import pytest
 
-#test node constructor
+# Test node constructor.
 
 
 def test_graph_init_set_of_nodes(graph_empty):
     assert graph_empty.set_of_nodes == set()
 
+
 def test_graph_add_node(graph_empty):
     graph_empty.add_node('gnode1')
     assert 'gnode1' in graph_empty.set_of_nodes
+
 
 def test_graph_has_node_true(graph_empty):
     graph_empty.add_node('gnode1')
     assert graph_empty.has_node('gnode1') is True
 
+
 def test_graph_node_non_hashable(graph_empty):
     with pytest.raises(TypeError):
         graph_empty.add_node(['list'])
 
+
 def test_graph_has_node_false(graph_empty):
     assert graph_empty.has_node('gnode1') is False
+
 
 def test_graph_add_edge_both_nodes_in_graph(graph_two_node):
     graph_two_node.add_edge('gnode1', 'gnode2', 0)
     assert 'gnode2' in graph_two_node.gnodes['gnode1']
 
+
 def test_graph_add_edge_both_nodes_in_graph_check_edge_direction(graph_two_node):
     graph_two_node.add_edge('gnode1', 'gnode2', 0)
     assert 'gnode1' not in graph_two_node.gnodes['gnode2']
+
 
 def test_graph_add_edge_one_node_in_graph_check_edge(graph_one_node):
     graph_one_node.add_edge('gnode1', 'gnode2', 0)
     assert 'gnode2' in graph_one_node.gnodes['gnode1']
 
+
 def test_graph_add_edge_one_node_in_graph_check_node(graph_one_node):
     graph_one_node.add_edge('gnode1', 'gnode2', 0)
     assert 'gnode2' in graph_one_node.gnodes['gnode1']
+
 
 def test_graph_add_edge_neither_node_in_graph_check_edge(graph_empty):
     graph_empty.add_edge('gnode1', 'gnode2', 0)
     assert 'gnode2' in graph_empty.gnodes['gnode1']
 
+
 def test_graph_add_edge_neither_node_in_graph_check_node1(graph_empty):
     graph_empty.add_edge('gnode1', 'gnode2', 0)
     assert 'gnode1' in graph_empty.gnodes
+
 
 def test_graph_add_edge_neither_node_in_graph_check_node2(graph_empty):
     graph_empty.add_edge('gnode1', 'gnode2', 0)
@@ -81,16 +92,18 @@ def test_graph_del_node_check_edges(graph_empty):
     graph_empty.del_node('gnode2')
     assert 'gnode2' not in graph_empty.gnodes['gnode1']
 
+
 def test_graph_del_node_not_a_node(graph_empty):
     graph_empty.add_edge('gnode1', 'gnode2', 0)
     with pytest.raises(KeyError):
         graph_empty.del_node('gnode3')
 
+
 def test_graph_del_node_other_nodes_not_changed(graph_two_node):
     graph_two_node.add_edge('gnode1', 'gnode2', 0)
     graph_two_node.add_edge('gnode3', 'gnode1', 0)
     graph_two_node.del_node('gnode2')
-    assert 'gnode1' in graph_two_node.gnodes['gnode3'] 
+    assert 'gnode1' in graph_two_node.gnodes['gnode3']
 
 
 def test_adjacent_true(graph_two_node):
@@ -111,7 +124,6 @@ def test_adjacent_error_not_in_graph(graph_one_node):
 def test_neighbors_has_edges(graph_two_node):
     graph_two_node.add_edge('gnode1', 'gnode2', 0)
     assert graph_two_node.neighbors('gnode1') == ['gnode2']
-
 
 
 def test_neighbors_no_edges(graph_two_node):
@@ -165,7 +177,6 @@ def test_depth_transversal_two_node(graph_two_node):
     assert 'gnode2' in graph_two_node.depth_first_traversal('gnode1')
 
 
-
 def test_breadth_transversal_two_node_not_in_traversal(graph_two_node):
     graph_two_node.add_edge('gnode2', 'gnode1', 0)
     assert 'gnode2' not in graph_two_node.breadth_first_traversal('gnode1')
@@ -195,7 +206,7 @@ def test_order_breadth_transversal(graph_v):
 def test_order_depth_transversal(graph_v):
     """Graph: 4->2->1<-3<-5 Check to see if it goes to the bottom before other children."""
     transversal = graph_v.depth_first_traversal('gnode1')
-    if transversal.index('gnode2') < transversal.index('gnode3'): 
+    if transversal.index('gnode2') < transversal.index('gnode3'):
         assert transversal.index('gnode4') < transversal.index('gnode3')
     else:
         assert transversal.index('gnode5') < transversal.index('gnode2')
@@ -228,21 +239,42 @@ def test_dijkstra_dictionary_has_all_nodes(graph_multi_node):
     for key in graph_multi_node.gnodes:
         assert key in graph_multi_node.dijkstra_init()
 
+
 def test_dijkstra_init_nodes_have_distance(graph_multi_node):
     """Test that each node has the attribute distance."""
     for key in graph_multi_node.dijkstra_init():
         assert graph_multi_node.dijkstra_init()[key]["distance"] is None
+
 
 def test_dijkstra_init_nodes_visited(graph_multi_node):
     """Test that each node visitied is false."""
     for key in graph_multi_node.dijkstra_init():
         assert graph_multi_node.dijkstra_init()[key]["visited"] is False
 
+
 def test_dijkstra_startnode_zero_distance_value(graph_multi_node):
     """Test that start node has a beginning distance of zero."""
     assert graph_multi_node.dijkstra('gn1', 'gn3')['gn1']['distance'] == 0
 
-def test_dijkstra_startnode_zero_distance_value(graph_multi_node):
-    """Test that start node has a beginning distance of zero."""
+
+def test_dijkstra_nextnode_distance_value(graph_multi_node):
+    """Test that the next node has a has a distance."""
     assert graph_multi_node.dijkstra('gn1', 'gn3')['gn3']['distance'] == 7
+
+
+def test_dijkstra_nextnode_previous_value(graph_multi_node):
+    """Test that the previous node value gets set."""
+    assert graph_multi_node.dijkstra('gn1', 'gn3')['gn3']['previous_node'] == 'gn1'
+
+def test_dijkstra_startnode_visited(graph_multi_node):
+    """Test that start node has been visited."""
+    assert graph_multi_node.dijkstra('gn1', 'gn3')['gn1']['visited'] is True
+
+
+
+
+
+
+
+
 
