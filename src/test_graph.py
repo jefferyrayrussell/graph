@@ -270,7 +270,9 @@ def test_dijkstra_startnode_visited(graph_multi_node):
     """Test that start node has been visited."""
     assert graph_multi_node.dijkstra('gn1', 'gn3')['gn1']['visited'] is True
 
-
+def test_dijkstra_shortest_distance(graph_multi_node):
+    """Test that the edge with the shortest distance is selected."""
+    assert graph_multi_node.dijkstr_select_node() == "gn3"
 
 
 
