@@ -15,7 +15,10 @@ A Graph in Python.
 
 A Graph is A graph is a set of (vertices, nodes, points) and a 
 collection of (edges, lines, arcs) that each connect a pair of vertices.  
-Nodes and edges are the key attributes of a graph.
+Nodes and edges are the key attributes of a graph.  Weighted edges are
+introduced as an attribute of the graph using dictionaries.  This allows
+the making of a value judgment about the shortest path between two nodes.
+
 
 __Methods__:
 * g.nodes(): return a list of all nodes in the graph
@@ -40,3 +43,7 @@ __Methods__:
 * g.breadth_first_traversal(start): Perform a full breadth-first traversal 
     of the graph, beginning at start. Return the full visited path when 
     traversal is complete.
+* g.dijkstra(): Employs Dijkstra's algorithm to solve the shortest path
+    problem in the graph traversal.
+* g.SELECTED ALGORITHM to solve the shortest path problem in the graph
+    traversal.
