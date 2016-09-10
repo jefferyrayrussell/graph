@@ -127,7 +127,9 @@ class Graph(object):
     the shortest distance becomes the current node.  We reiterate through
     the dictionary.  We process the neighbors of the new current node.
 
-
+    Once the shortest path is found, then display the distance and path
+    as a list. We will get the shortest path by traversing from previous
+    node to previous node and appending to a list.  
     """
 
     def dijkstra(self, start_node, end_node):
@@ -139,9 +141,11 @@ class Graph(object):
             current_node = self.dijkstra_select_node(my_dict)
             if current_node == end_node:
                 break
+            if current_node is None:
+                raise ValueError
             my_dict = self.dijkstra_update_distances(my_dict, current_node)
 
-        return my_dict
+        return self.dijkstra_length_path(my_dict, end_node)
 
 
     def dijkstra_init(self):
@@ -187,11 +191,18 @@ class Graph(object):
         return my_dict
 
 
-
-
-
-
-
+    def dijkstra_length_path(self, my_dict, end_node):
+        """Returns length and list of previous nodes."""
+        current_node = end_node
+        node_list = [end_node]
+        # import pdb; pdb.set_trace()
+        while True:
+            try: 
+                node_list.append(my_dict[current_node]['previous_node'])
+            except KeyError:
+                break
+            current_node = my_dict[current_node]['previous_node']
+        return my_dict[end_node]['distance'], node_list
 
 
 if __name__ == '__main__':              # pragma: no cover

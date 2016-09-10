@@ -187,6 +187,10 @@ def test_depth_transversal_two_node_not_in_traversal(graph_two_node):
     assert 'gnode2' not in graph_two_node.depth_first_traversal('gnode1')
 
 
+def test_depth_transversal_multi_node(graph_multi_node):
+    assert 'gn5' in graph_multi_node.depth_first_traversal('gn1')
+
+
 def test_breadth_transversal_cyclic(graph_cyclic):
     """Test cyclic graph with transversal"""
     assert 'gnode3' in graph_cyclic.breadth_first_traversal('gnode1')
@@ -254,27 +258,50 @@ def test_dijkstra_init_nodes_visited(graph_multi_node):
 
 def test_dijkstra_startnode_zero_distance_value(graph_multi_node):
     """Test that start node has a beginning distance of zero."""
-    assert graph_multi_node.dijkstra('gn1', 'gn3')['gn1']['distance'] == 0
+    assert graph_multi_node.dijkstra('gn1', 'gn1')[0] == 0
 
 
 def test_dijkstra_nextnode_distance_value(graph_multi_node):
     """Test that the next node has a has a distance."""
-    assert graph_multi_node.dijkstra('gn1', 'gn3')['gn3']['distance'] == 7
+    assert graph_multi_node.dijkstra('gn1', 'gn3')[0] == 7
 
 
 def test_dijkstra_nextnode_previous_value(graph_multi_node):
     """Test that the previous node value gets set."""
-    assert graph_multi_node.dijkstra('gn1', 'gn3')['gn3']['previous_node'] == 'gn1'
+    assert graph_multi_node.dijkstra('gn1', 'gn3')[1] == ['gn3', 'gn1']
 
-def test_dijkstra_startnode_visited(graph_multi_node):
-    """Test that start node has been visited."""
-    assert graph_multi_node.dijkstra('gn1', 'gn3')['gn1']['visited'] is True
+# def test_dijkstra_startnode_visited(graph_multi_node):
+#     """Test that start node has been visited."""
+#     assert graph_multi_node.dijkstra('gn1', 'gn3')['gn1']['visited'] is True
 
 def test_dijkstra_shortest_distance(graph_empty, dijkstra_dictionary):
     """Test that the edge with the shortest distance is selected."""
-    assert graph_empty.dijkstra_select_node(dijkstra_dictionary) == "a"
+    assert graph_empty.dijkstra_select_node(dijkstra_dictionary) == "gn3"
 
+def test_dijkstra_update_distances(graph_multi_node, dijkstra_dictionary):
+    """Test that the distance is correctly updating."""
+    new_dict = graph_multi_node.dijkstra_update_distances(dijkstra_dictionary, "gn3")
+    assert new_dict["gn5"]['distance'] == 17
 
+def test_dijkstra_initialize_distances(graph_multi_node, dijkstra_dictionary):
+    """Test that the distance is correctly initializing."""
+    new_dict = graph_multi_node.dijkstra_update_distances(dijkstra_dictionary, "gn3")
+    assert new_dict["gn4"]['distance'] == 11
+
+def test_dijkstra_total_distance(graph_multi_node, dijkstra_dictionary_final):
+    """Test that the total distance is correctly returned."""
+    total_length = graph_multi_node.dijkstra_length_path(dijkstra_dictionary_final, "gn5")[0]
+    assert total_length == 13
+
+def test_dijkstra_shortest_path(graph_multi_node, dijkstra_dictionary_final):
+    """Test that the shortest path is correctly returned."""
+    shortest_path = graph_multi_node.dijkstra_length_path(dijkstra_dictionary_final, "gn5")[1]
+    assert shortest_path == ['gn5', 'gn4', 'gn3', 'gn1']
+
+def test_dijkstra_not_connected(graph_multi_node, dijkstra_dictionary_final):
+    """Test that the value error is raised when two nodes are not connected."""
+    with pytest.raises(ValueError):
+        graph_multi_node.dijkstra('gn1', 'gn2')
 
 
 

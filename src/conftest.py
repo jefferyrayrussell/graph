@@ -61,8 +61,21 @@ def graph_multi_node(graph_empty):
 @pytest.fixture()
 def dijkstra_dictionary():
     my_dict = {
-        'a': {'distance': 8, 'visited': False},
-        'b': {'visited': False},
-        'c': {'distance': 12, 'visited': False}
+        'gn1': {'distance': 0, 'visited': True},
+        'gn3': {'distance': 7, 'visited': False},
+        'gn4': {'visited': False},
+        'gn5': {'distance': 20, 'visited': False}
+    }
+    return my_dict
+
+
+@pytest.fixture()
+def dijkstra_dictionary_final():
+    my_dict = {
+        'gn1': {'distance': 0, 'visited': True},
+        'gn2': {'visited': False},
+        'gn3': {'distance': 7, 'visited': True, 'previous_node': 'gn1'},
+        'gn4': {'distance': 11, 'visited': True, 'previous_node': 'gn3'},
+        'gn5': {'distance': 13, 'visited': False, 'previous_node': 'gn4'}
     }
     return my_dict
