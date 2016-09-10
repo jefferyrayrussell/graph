@@ -1,3 +1,6 @@
+"""Graph Data Structure with Dijkstra Algorithm Implimentation Code."""
+
+
 class Graph(object):
     """Create a Graph Constructor."""
 
@@ -15,28 +18,27 @@ class Graph(object):
             except TypeError:
                 raise TypeError('Nodes value need to be a hashable type.')
 
-
     def has_node(self, value):
+        """Determine the presence of a node."""
         return value in self.set_of_nodes
 
-
     def add_edge(self, value1, value2, weight):
-        # import pdb; pdb.set_trace()
+        """Add edge and weight."""
         if not self.has_node(value1):
             self.add_node(value1)
         if not self.has_node(value2):
             self.add_node(value2)
         self.gnodes[value1][value2] = weight
 
-
     def del_edge(self, value1, value2):
+        """Remove edge between two nodes."""
         try:
             del(self.gnodes[value1][value2])
         except KeyError:
             raise KeyError('Edge that you are trying to exist does not exist.')
 
-
     def del_node(self, value):
+        """Remove a node."""
         try:
             self.set_of_nodes.remove(value)
         except KeyError:
@@ -49,10 +51,11 @@ class Graph(object):
                 pass
 
     def nodes(self):
+        """Return a list of nodes."""
         return list(self.set_of_nodes)
 
-
     def edges(self):
+        """Return a list of edges."""
         edge_list = []
         for node in self.gnodes:
             for key in self.gnodes[node]:
@@ -60,19 +63,18 @@ class Graph(object):
                 edge_list.append(edge)
         return edge_list
 
-
     def adjacent(self, node1, node2):
+        """Determine if two nodes are adjacent."""
         if not(node1 in self.set_of_nodes and node2 in self.set_of_nodes):
             raise TypeError('A node is not in the graph.')
         return node2 in self.gnodes[node1]
 
-
     def neighbors(self, node):
+        """Return a list of neighbors."""
         return list(self.gnodes[node])
 
-
     def breadth_first_traversal(self, start):
-        """Return the full visited path when breadth traversal is complete after starting with any node."""
+        """Return visited path of completed breadth traversal."""
         if self.has_node(start):
             traversal = []
             traversal.append(start)
@@ -85,14 +87,12 @@ class Graph(object):
                 index += 1
             return traversal
 
-
     def depth_first_traversal(self, start):
-        """Return the full visited path when depth traversal is complete after starting with any node."""
+        """Return visited path of completed breadth traversal."""
         if self.has_node(start):
             traversal = []
             traversal = self.depth_traversal_add_node(start, traversal)
             return traversal
-
 
     def depth_traversal_add_node(self, start, traversal):
         """Add node for depth_first_traversal."""
@@ -104,36 +104,8 @@ class Graph(object):
                 self.depth_traversal_add_node(edge, traversal)
             return traversal
 
-    """
-    Pseudo-Code for Dijkstra's Algorithm used to find the shortest
-    path between two nodes.
-
-    Function will take two nodes of a graph data structure and return
-    the shortest path between those two nodes.  The return will be the
-    path of nodes in a list and the total weight.
-
-    Set up a dictionary whose keys are each individual node in the graph
-    structure and the value for each key will be a second dictionary.
-    That second dictionary contains keys that will be distance,
-    previous node, and has been visited node (true or false).
-
-    Begin with a start_node A whose distance is set to 0.
-    For neighbors of A:
-        distance equals the weight of the edge between A and the neighbor.
-        previous node equals A
-    Start node A becomes visited.
-    We need to traverse through each of the nodes in the dictionary my_dict
-    and determine which node has the shortest distance.  That node with
-    the shortest distance becomes the current node.  We reiterate through
-    the dictionary.  We process the neighbors of the new current node.
-
-    Once the shortest path is found, then display the distance and path
-    as a list. We will get the shortest path by traversing from previous
-    node to previous node and appending to a list.  
-    """
-
     def dijkstra(self, start_node, end_node):
-        """Implementation of Dijkstra Algorithm to determine the shortest distance between two nodes."""
+        """Implementation of Dijkstra Algorithm."""
         my_dict = self.dijkstra_init()
         my_dict[start_node]['distance'] = 0
 
@@ -147,18 +119,16 @@ class Graph(object):
 
         return self.dijkstra_length_path(my_dict, end_node)
 
-
     def dijkstra_init(self):
-        """Implementation of Dijkstra Algorithm to determine the shortest distance between two nodes."""
+        """Initialization of Dijkstra Algorithm."""
         my_dict = {}
         for key in self.gnodes:
             my_dict[key] = {}
-            # my_dict[key]["distance"] = None
             my_dict[key]["visited"] = False
         return my_dict
 
     def dijkstra_select_node(self, my_dict):
-        """Select the current shortest distance"""
+        """Select the current shortest distance between two nodes."""
         smallest_length = 0
         for node in my_dict:
             try:
@@ -173,8 +143,9 @@ class Graph(object):
             return current_node
         except NameError:
             return None
-            
+
     def dijkstra_update_distances(self, my_dict, current_node):
+        """Update current distance during traversal."""
         current_length = my_dict[current_node]['distance']
         for node in self.neighbors(current_node):
             new_length = current_length + self.gnodes[current_node][node]
@@ -190,14 +161,12 @@ class Graph(object):
         my_dict[current_node]['visited'] = True
         return my_dict
 
-
     def dijkstra_length_path(self, my_dict, end_node):
-        """Returns length and list of previous nodes."""
+        """Return length and list of previous nodes."""
         current_node = end_node
         node_list = [end_node]
-        # import pdb; pdb.set_trace()
         while True:
-            try: 
+            try:
                 node_list.append(my_dict[current_node]['previous_node'])
             except KeyError:
                 break
@@ -205,7 +174,7 @@ class Graph(object):
         return my_dict[end_node]['distance'], node_list
 
 
-if __name__ == '__main__':              # pragma: no cover
+if __name__ == '__main__':  # pragma: no cover
 
     g6 = Graph()
     node_list = list('abcdefghijk')
