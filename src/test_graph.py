@@ -240,10 +240,10 @@ def test_dijkstra_dictionary_has_all_nodes(graph_multi_node):
         assert key in graph_multi_node.dijkstra_init()
 
 
-def test_dijkstra_init_nodes_have_distance(graph_multi_node):
-    """Test that each node has the attribute distance."""
-    for key in graph_multi_node.dijkstra_init():
-        assert graph_multi_node.dijkstra_init()[key]["distance"] is None
+# def test_dijkstra_init_nodes_have_distance(graph_multi_node):
+#     """Test that each node has the attribute distance."""
+#     for key in graph_multi_node.dijkstra_init():
+#         assert graph_multi_node.dijkstra_init()[key]["distance"] is None
 
 
 def test_dijkstra_init_nodes_visited(graph_multi_node):
@@ -270,9 +270,9 @@ def test_dijkstra_startnode_visited(graph_multi_node):
     """Test that start node has been visited."""
     assert graph_multi_node.dijkstra('gn1', 'gn3')['gn1']['visited'] is True
 
-def test_dijkstra_shortest_distance(graph_multi_node):
+def test_dijkstra_shortest_distance(graph_empty, dijkstra_dictionary):
     """Test that the edge with the shortest distance is selected."""
-    assert graph_multi_node.dijkstr_select_node() == "gn3"
+    assert graph_empty.dijkstra_select_node(dijkstra_dictionary) == "a"
 
 
 

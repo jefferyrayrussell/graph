@@ -56,3 +56,13 @@ def graph_multi_node(graph_empty):
     graph_empty.add_edge('gn3', 'gn5', 10)
     graph_empty.add_edge('gn4', 'gn5', 2)
     return (graph_empty)
+
+
+@pytest.fixture()
+def dijkstra_dictionary():
+    my_dict = {
+        'a': {'distance': 8, 'visited': False},
+        'b': {'visited': False},
+        'c': {'distance': 12, 'visited': False}
+    }
+    return my_dict

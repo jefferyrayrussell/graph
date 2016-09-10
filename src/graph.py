@@ -134,10 +134,13 @@ class Graph(object):
         """Implementation of Dijkstra Algorithm to determine the shortest distance between two nodes."""
         my_dict = self.dijkstra_init()
         my_dict[start_node]['distance'] = 0
-        for neighbor in self.neighbors(start_node):
-            my_dict[neighbor]['distance'] = self.gnodes[start_node][neighbor]
-            my_dict[neighbor]['previous_node'] = start_node
-        my_dict[start_node]['visited'] = True
+
+        while True:
+            current_node = self.dijkstra_select_node(my_dict)
+            if current_node == end_node:
+                break
+            my_dict = self.dijkstra_update_distances(my_dict, current_node)
+
         return my_dict
 
 
@@ -146,7 +149,7 @@ class Graph(object):
         my_dict = {}
         for key in self.gnodes:
             my_dict[key] = {}
-            my_dict[key]["distance"] = None
+            # my_dict[key]["distance"] = None
             my_dict[key]["visited"] = False
         return my_dict
 
@@ -158,14 +161,34 @@ class Graph(object):
                 current_length = my_dict[node]['distance']
             except KeyError:
                 continue
-            if current_length < smallest_length or smallest_length = 0:
-                smallest_length = current_length
-                current_node = node
+            if not my_dict[node]['visited']:
+                if current_length < smallest_length or smallest_length == 0:
+                    smallest_length = current_length
+                    current_node = node
         try:
             return current_node
         except NameError:
             return None
             
+    def dijkstra_update_distances(self, my_dict, current_node):
+        current_length = my_dict[current_node]['distance']
+        for node in self.neighbors(current_node):
+            new_length = current_length + self.gnodes[current_node][node]
+            try:
+                if new_length > my_dict[node]['distance']:
+                    continue
+            except KeyError:
+                pass
+
+            my_dict[node]['distance'] = new_length
+            my_dict[node]['previous_node'] = current_node
+
+        my_dict[current_node]['visited'] = True
+        return my_dict
+
+
+
+
 
 
 
