@@ -335,3 +335,45 @@ def test_dijkstra_not_connected(graph_multi_node, dijkstra_dictionary_final):
     """Test that the value error is raised when two nodes are not connected."""
     with pytest.raises(ValueError):
         graph_multi_node.dijkstra('gn1', 'gn2')
+
+
+def test_bellman_has_all_nodes(graph_multi_node):
+    for key in graph_multi_node.gnodes:
+        assert key in graph_multi_node.bellman_init()
+
+
+def test_bellman_init_distance(graph_multi_node):
+    for key in graph_multi_node.gnodes:
+        assert graph_multi_node.bellman_init()[key]['distance'] is None
+
+
+def test_bellman_init_prev_node(graph_multi_node):
+    for key in graph_multi_node.gnodes:
+        assert graph_multi_node.bellman_init()[key]['prev_node'] is None
+
+
+def test_bellman_startnode_zero_distance_value(graph_multi_node):
+    """Test that start node has a beginning distance of zero."""
+    assert graph_multi_node.bellman('gn1')['gn1']['distance'] == 0
+
+
+def test_bellman_nextnode_distance_value(graph_multi_node):
+    """Test that the next node has a has a distance."""
+    assert graph_multi_node.bellman('gn1')['gn3']['distance'] == 7
+
+
+def test_bellman_nextnode_previous_value(graph_multi_node):
+    """Test that the previous node value gets set."""
+    assert graph_multi_node.bellman('gn1')['gn3']['prev_node'] == 'gn1'
+
+
+def test_bellman_update_distances(graph_multi_node, dijkstra_dictionary):
+    """Test that the distance is correctly updating."""
+    new_dict = graph_multi_node.dijkstra_update_distances(dijkstra_dictionary, "gn3")
+    assert new_dict["gn5"]['distance'] == 17
+
+
+def test_bellman_initialize_distances(graph_multi_node, dijkstra_dictionary):
+    """Test that the distance is correctly initializing."""
+    new_dict = graph_multi_node.dijkstra_update_distances(dijkstra_dictionary, "gn3")
+    assert new_dict["gn4"]['distance'] == 11
