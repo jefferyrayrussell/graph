@@ -344,7 +344,7 @@ def test_bellman_has_all_nodes(graph_multi_node):
 
 def test_bellman_init_distance(graph_multi_node):
     for key in graph_multi_node.gnodes:
-        assert graph_multi_node.bellman_init()[key]['distance'] is None
+        assert graph_multi_node.bellman_init()[key]['distance'] == float("inf")
 
 
 def test_bellman_init_prev_node(graph_multi_node):
@@ -377,3 +377,8 @@ def test_bellman_initialize_distances(graph_multi_node, dijkstra_dictionary):
     """Test that the distance is correctly initializing."""
     new_dict = graph_multi_node.dijkstra_update_distances(dijkstra_dictionary, "gn3")
     assert new_dict["gn4"]['distance'] == 11
+
+
+def test_bellman_negative_cycle(graph_cyclic):
+    with pytest.raises(ArithmeticError):
+        graph_cyclic.bellman('gnode1')

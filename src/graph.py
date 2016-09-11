@@ -1,5 +1,6 @@
+# -*- coding: utf-8 -*-
 """Graph Data Structure with Dijkstra Algorithm Implimentation Code."""
-import pprint
+
 
 class Graph(object):
     """Create a Graph Constructor."""
@@ -173,7 +174,6 @@ class Graph(object):
             current_node = my_dict[current_node]['previous_node']
         return my_dict[end_node]['distance'], node_list
 
-
     def bellman(self, start):
         """An implimentation of the Bellman-Ford algorithm."""
         my_dict = self.bellman_init()
@@ -194,14 +194,15 @@ class Graph(object):
                 itteration_change = itteration_change or has_changed
             if itteration_change:
                 raise ArithmeticError("Graph contains a negative-weight cycle")
-        
+
         return my_dict
 
     def bellman_init(self):
+        """Initialize the bellman function."""
         my_dict = {}
         for node in self.gnodes:
             my_dict[node] = {}
-            my_dict[node]["distance"] = None
+            my_dict[node]["distance"] = float("inf")
             my_dict[node]["prev_node"] = None
         return my_dict
 
@@ -212,19 +213,14 @@ class Graph(object):
             current_length = my_dict[current_node]['distance']
             for node in self.neighbors(current_node):
                 new_length = current_length + self.gnodes[current_node][node]
-                try:
-                    if new_length >= my_dict[node]['distance']:
+                if new_length >= my_dict[node]['distance']:
                         continue
-                except TypeError:
-                    pass
 
                 my_dict[node]['distance'] = new_length
                 my_dict[node]['prev_node'] = current_node
                 has_changed = True
 
         return my_dict, has_changed
-
-
 
 
 if __name__ == '__main__':  # pragma: no cover
