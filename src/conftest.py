@@ -32,9 +32,9 @@ def graph_one_node():
 def graph_cyclic(graph_two_node):
     """Create a cyclic two node graph."""
     graph_cyclic = graph_two_node
-    graph_cyclic.add_edge('gnode1', 'gnode2', 0)
-    graph_cyclic.add_edge('gnode2', 'gnode3', 0)
-    graph_cyclic.add_edge('gnode3', 'gnode1', 0)
+    graph_cyclic.add_edge('gnode1', 'gnode2', 1)
+    graph_cyclic.add_edge('gnode2', 'gnode3', -5)
+    graph_cyclic.add_edge('gnode3', 'gnode1', 2)
     return (graph_cyclic)
 
 

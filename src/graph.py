@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Graph Data Structure with Dijkstra Algorithm Implimentation Code."""
 
 
@@ -150,7 +151,7 @@ class Graph(object):
         for node in self.neighbors(current_node):
             new_length = current_length + self.gnodes[current_node][node]
             try:
-                if new_length > my_dict[node]['distance']:
+                if new_length >= my_dict[node]['distance']:
                     continue
             except KeyError:
                 pass
@@ -172,6 +173,54 @@ class Graph(object):
                 break
             current_node = my_dict[current_node]['previous_node']
         return my_dict[end_node]['distance'], node_list
+
+    def bellman(self, start):
+        """An implimentation of the Bellman-Ford algorithm."""
+        my_dict = self.bellman_init()
+        list_of_nodes = list(self.set_of_nodes)
+        my_dict[start]['distance'] = 0
+        has_changed = True
+        for itteration in range(len(list_of_nodes) - 2):
+            itteration_change = False
+            for node in list_of_nodes:
+                my_dict, has_changed = self.bellman_update_distance(my_dict, node)
+                itteration_change = itteration_change or has_changed
+            if not itteration_change:
+                break
+        else:
+            itteration_change = False
+            for node in list_of_nodes:
+                my_dict, has_changed = self.bellman_update_distance(my_dict, node)
+                itteration_change = itteration_change or has_changed
+            if itteration_change:
+                raise ArithmeticError("Graph contains a negative-weight cycle")
+
+        return my_dict
+
+    def bellman_init(self):
+        """Initialize the bellman function."""
+        my_dict = {}
+        for node in self.gnodes:
+            my_dict[node] = {}
+            my_dict[node]["distance"] = float("inf")
+            my_dict[node]["prev_node"] = None
+        return my_dict
+
+    def bellman_update_distance(self, my_dict, current_node):
+        """Update current distance during traversal."""
+        has_changed = False
+        if my_dict[current_node]['distance'] is not None:
+            current_length = my_dict[current_node]['distance']
+            for node in self.neighbors(current_node):
+                new_length = current_length + self.gnodes[current_node][node]
+                if new_length >= my_dict[node]['distance']:
+                        continue
+
+                my_dict[node]['distance'] = new_length
+                my_dict[node]['prev_node'] = current_node
+                has_changed = True
+
+        return my_dict, has_changed
 
 
 if __name__ == '__main__':  # pragma: no cover
